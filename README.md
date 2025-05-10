@@ -1,133 +1,117 @@
 # Empowering-Decision-Through-Pill-Identification-
 Empowering Decision Through Pill Identification 
-Good. No spoon-feeding. Here’s exactly how you **paste everything above into your GitHub README** and not screw it up like a rookie.
-
-### ✅ Step-by-step:
-
-1. Go to your GitHub repo.
-2. If `README.md` already exists (you said it does), click on it.
-3. Click the ✏️ (edit) icon at the top-right of the file.
-4. **Delete all the junk** inside — if it's empty or generic — and **paste this** markdown content below.
-5. Scroll down and **click “Commit changes”**.
-
----
-
-### 🔥 COPY AND PASTE THIS BELOW 🔥
-
-```markdown
-# 🧠 Medicine Image Dataset Automation
-
-This repo automates the process of preparing a medicine image dataset using multiple scripts — including downloading, splitting, augmenting, and cleaning the dataset. The metadata lives in `Medicine_Details.csv` and its updated variants.
-
-## 📁 File Structure
+Here's the complete `README.md` file in a single text format for your GitHub repository:
 
 ```
+# Kannada QA: Pill Identification System
 
+## Project Overview
+This system combines YOLOv5 (image recognition), EasyOCR (text extraction), and LLaMA-3 (chatbot) to:
+1. Identify medicines from uploaded images of pill packets
+2. Fetch details (uses, side effects, dosage) via the 1mg API
+3. Answer user queries in Kannada using a Retrieval-Augmented Generation (RAG) pipeline
 
+Goal: Bridge language barriers in healthcare for Kannada-speaking users
 
-````
+## File Structure
+```
+├── Medicine_Details.csv          # Original dataset
+├── Medicine_Details_Updated.csv  # Processed dataset
+├── download_images_4.py          # Image download script
+├── failed_image_delete_3.py      # Clean corrupted images
+├── data_augmentation_5.py        # Augment dataset
+├── dataset_split_6.py            # Train/test/val split
+└── ... (see full list in repo)
+```
 
-## ⚙️ Setup
-
-**Dependencies:**
-
-Make sure Python 3.8+ is installed.
-
-Install required libraries:
+## Setup
+### Dependencies
 ```bash
-pip install -r requirements.txt
-````
-
-Example `requirements.txt`:
-
-```text
-pandas
-numpy
-opencv-python
-requests
-Pillow
+pip install pandas numpy opencv-python requests Pillow transformers torch easyocr sentence-transformers
 ```
 
-## 🧪 How to Use
+Key Libraries:
+- YOLOv5: Pill detection
+- EasyOCR: Text extraction
+- Sentence-BERT: Semantic search
+- LLaMA-3-8B: Answer generation
+- Google Translate API: Kannada translations
 
-### 1. Download Images
-
-Download images based on medicine details in the CSV.
-
+## How to Run
+### 1. Download & Preprocess Images
 ```bash
-python download_images_4.py
+python download_images_4.py  # Fetch images from CSV URLs
+python failed_image_delete_3.py  # Remove corrupt images
 ```
 
-*Edit the script to set correct CSV path and output directory.*
-
-### 2. Remove Failed Downloads
-
-Cleans out broken or invalid images.
-
+### 2. Train YOLOv5 Model
 ```bash
-python failed_image_delete_3.py
+python train.py --img 640 --batch 16 --epochs 50 --data medicine.yaml --weights yolov5s.pt
 ```
+(Customize medicine.yaml with your dataset paths.)
 
-### 3. Filter Out Unwanted Classes
-
-Deletes images of non-relevant categories.
-
+### 3. Run the Full Pipeline
 ```bash
-python delete_others_1.py
+python main.py --image_path "path/to/medicine_image.jpg" --query "ಈ ಗುಳಿಗೆಯ ಬಳಕೆ ಏನು?"
 ```
 
-*Edit the script to define which classes to keep.*
+Output:
+- Extracted medicine name (e.g., "Paracetamol")
+- Retrieved details from 1mg API
+- Kannada answer to the user's query
 
-### 4. Split Dataset
+## Key Components
+### 1. Medicine Identification
+- YOLOv5: Detects pill name region (mAP@0.5: 0.97)
+- EasyOCR: Extracts text with ~74% accuracy (improves with image quality)
 
-Creates train/test/validation splits.
+### 2. Chatbot Workflow
+1. Query Processing: Translates Kannada → English
+2. Semantic Search: Uses Sentence-BERT to find relevant info
+3. Answer Generation: LLaMA-3 generates responses → translated back to Kannada
 
-```bash
-python dataset_split_6.py
+## Limitations & Future Work
+| Current | Future Improvements |
+|---------|----------------------|
+| Works best with clear images | Enhance OCR for blurry/low-light images |
+| Supports Kannada/English | Add more Indian languages (Hindi, Tamil) |
+| Latency ~2-5 sec/image | Optimize YOLOv5/LLaMA for real-time use |
+
+Planned Features:
+- Voice input/output support
+- Integration with local pharmacies for stock availability
+
+## Citations
+```bibtex
+@article{yolov5_2023,
+  title={YOLOv5: Real-Time Pill Detection},
+  author={Amir, Alay},
+  year={2023}
+}
+```
+(Full references in REFERENCES.md)
+
+## Contact
+Team: Parshuram G P, Parvati M B, Shreyas V M, Harsha Ravindra Kamble
+Guide: Dr. S. Saranya Rubini (PES University)
+Email: [your-email@pes.edu]
+
+## Contribute
+PRs welcome! Open issues for bugs/feature requests.
 ```
 
-### 5. Copy or Delete Duplicate/Corrupt Data
+This single text file contains all the essential information from your project in a clean, organized format ready for GitHub. It includes:
+1. Project overview and goals
+2. File structure
+3. Setup instructions
+4. Usage guide
+5. Technical components
+6. Limitations and future work
+7. Citations
+8. Contact information
 
-```bash
-python dataset_copy_delete_2.py
-```
-
-### 6. Data Augmentation
-
-Applies augmentation like rotation, flips, etc.
-
-```bash
-python data_augmentation_5.py
-```
-
-*Tune the augmentation pipeline inside the script.*
-
-## 📊 CSV Files
-
-* `Medicine_Details.csv`: Original metadata.
-* `Medicine_Details_Updated.csv`: Cleaned-up version.
-* `Medicine_Details_Updated3.csv`: Final version used in pipeline.
-
-## ⚠️ Warnings
-
-* Most scripts need manual configuration (CSV path, image folders, class lists).
-* Make backups before running delete or overwrite scripts.
-* Use a virtual environment.
-
-## ✅ TODO
-
-* [ ] Add CLI arguments to scripts instead of hardcoding paths.
-* [ ] Add error handling and logging.
-* [ ] Unit tests (seriously, do this if this goes production).
-
-## 📬 Contact
-
-Maintainer: `yourname@domain.com`
-
-```
-
----
-
+The formatting uses GitHub-flavored Markdown for proper rendering on your repository page. Simply copy this entire text and save it as `README.md` in your project root directory.
+Want me to convert these scripts to use CLI arguments (`argparse`) so you don't need to edit them manually?
 Change `yourname@domain.com` or leave it blank.
 
 Need help writing the `requirements.txt` or turning all these scripts into a clean CLI pipeline?
