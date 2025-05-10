@@ -23,17 +23,7 @@ This repo automates the process of preparing a medicine image dataset using mult
 
 ```
 
-.
-├── Medicine\_Details.csv
-├── Medicine\_Details\_Updated.csv
-├── Medicine\_Details\_Updated3.csv
-├── data\_augmentation\_5.py
-├── dataset\_split\_6.py
-├── dataset\_copy\_delete\_2.py
-├── delete\_others\_1.py
-├── download\_images\_4.py
-├── failed\_image\_delete\_3.py
-├── README.md
+
 
 ````
 
