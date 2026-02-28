@@ -94,7 +94,7 @@ Planned Features:
 ## Contact
 Team: Parshuram G P, Parvati M B, Shreyas V M, Harsha Ravindra Kamble
 Guide: Dr. S. Saranya Rubini (PES University)
-Email: [your-email@pes.edu]
+Email: harshkamble14062002@gmail.com
 
 ## Contribute
 PRs welcome! Open issues for bugs/feature requests.
