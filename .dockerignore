@@ -9,3 +9,8 @@ venv/
 tests/
 output/
 *.log
+*.zip
+*.tar
+*.tar.gz
+releases/
+.github/

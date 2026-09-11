@@ -16,3 +16,23 @@ jobs:
           cache: pip
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
+
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Compose configuration
+        run: docker compose config --quiet
+      - name: Build the sharing image
+        run: docker compose build
+      - name: Start without external networking
+        run: docker run --detach --network none --memory 2g --name pill-smoke pill-detection:local
+      - name: Check the running app and OCR
+        run: docker exec -i pill-smoke python - < tests/container_smoke.py
+      - name: Container logs
+        if: always()
+        run: docker logs pill-smoke || true
+      - name: Remove the test container
+        if: always()
+        run: docker rm -f pill-smoke || true

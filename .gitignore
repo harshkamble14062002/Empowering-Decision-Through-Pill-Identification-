@@ -12,3 +12,6 @@ htmlcov/
 output/
 *.log
 .DS_Store
+releases/
+pill-detection-docker.zip
+pill-detection-image.tar

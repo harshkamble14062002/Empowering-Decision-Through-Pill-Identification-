@@ -52,11 +52,13 @@ tests/
   test_matching.py   OCR matching rules
   test_answers.py    Retrieved evidence and language behavior
   test_llm.py        OpenRouter requests and error handling
+  container_smoke.py Running container and offline OCR checks
 .github/workflows/tests.yml  Automated tests
 .env.example         Configuration template
 .gitignore           Files excluded from Git
 .dockerignore        Files excluded from container builds
 Dockerfile           Container setup
+compose.yaml         One-command Docker startup
 requirements.txt     Runtime dependencies
 requirements-dev.txt Test dependencies
 README.md            Setup and project notes
@@ -81,11 +83,41 @@ The automated tests mock OCR or OpenRouter where needed and do not make external
 
 ## Docker
 
+Install Docker Desktop on Windows/macOS, or Docker Engine with the Compose plugin on Linux. Use Linux containers. Extract the shared project ZIP and open a terminal in the folder containing `compose.yaml`.
+
 ```sh
-docker build -t pill-detection .
-docker run --rm -p 8000:8000 --env-file .env pill-detection
+docker compose up --build -d
 ```
 
-The image downloads OCR weights during the build. Use one server worker and allow about 2 GiB of memory. The API accepts JPG, PNG, WEBP and BMP uploads up to 10 MB. Requests are processed one at a time within the worker.
+Open [localhost:8000](http://localhost:8000). No local Python installation or GPU is needed. The first build needs internet access to download Python dependencies and OCR weights. Compose runs a Linux AMD64 image with a 2 GiB memory limit; Docker Desktop on Apple Silicon uses AMD64 emulation and can be slower. This setup uses CPU inference.
+
+For OpenRouter answers, copy `.env.example` to `.env`, enter your own API key, and run `docker compose up -d` again. Identification and local catalogue answers work with the key left blank. Internet access is required for OpenRouter answers. Change `APP_PORT` in `.env` if port 8000 is already occupied.
+
+```sh
+docker compose ps          # Show status
+docker compose logs -f     # Read logs
+docker compose down        # Stop the application
+```
+
+The API accepts JPG, PNG, WEBP and BMP uploads up to 10 MB. Requests are processed one at a time within the worker. Images and previews are temporary; no volume is required.
+
+### Share with another person
+
+Share the `showcase` branch ZIP, or the prepared `pill-detection-docker.zip`. The recipient extracts it and runs the Compose command above. The source package includes the medicine catalogue and saved index. API keys are not included.
+
+If you have already built the image, you can also share it without requiring another build:
+
+```sh
+docker save -o pill-detection-image.tar pill-detection:local
+```
+
+Send that TAR together with `compose.yaml` and `.env.example`. The recipient runs:
+
+```sh
+docker load -i pill-detection-image.tar
+docker compose up -d --no-build
+```
+
+Keep your personal `.env` file out of shared packages. The Docker build excludes it, and Compose passes configuration at startup. GitHub Actions builds the image and checks the running API, stored index and OCR with the container's external networking disabled.
 
 `GET /healthz` reports whether an OpenRouter key is configured; it does not test the provider connection. `POST /api/analyze` accepts multipart fields named `image` and `question`. Uploaded images and generated previews are removed after each request. Only the question and matched catalogue row are sent to OpenRouter.

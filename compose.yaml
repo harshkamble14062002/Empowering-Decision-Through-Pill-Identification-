@@ -1,0 +1,14 @@
+services:
+  pill:
+    build: .
+    image: pill-detection:local
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"
+    environment:
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openrouter/free}
+      PORT: "8000"
+    init: true
+    mem_limit: 2g
+    restart: unless-stopped
