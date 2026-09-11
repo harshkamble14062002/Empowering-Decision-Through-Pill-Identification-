@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="kn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pill Detection</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Pill Detection</h1>
+      <p>Upload a medicine cover and ask a question in English or Kannada.</p>
+      <p class="warning">ಈ ಸಾಧನವು ಶೈಕ್ಷಣಿಕ ಮಾಹಿತಿಗಾಗಿ ಮಾತ್ರ. ಡೋಸ್ ಅಥವಾ ಚಿಕಿತ್ಸೆಯನ್ನು ಬದಲಾಯಿಸಲು ವೈದ್ಯರನ್ನು ಸಂಪರ್ಕಿಸಿ.</p>
+      <form id="form" data-api-endpoint="/api/analyze">
+        <label for="image">Medicine cover image</label>
+        <input id="image" name="image" type="file" accept="image/*" required>
+        <label for="preset">ಪೂರ್ವನಿರ್ಧರಿತ ಕನ್ನಡ ಪ್ರಶ್ನೆ</label>
+        <select id="preset">
+        <option value="">ಪ್ರಶ್ನೆಯನ್ನು ಆಯ್ಕೆ ಮಾಡಿ ಅಥವಾ ಕೆಳಗೆ ಟೈಪ್ ಮಾಡಿ</option>
+        <option value="ಈ ಔಷಧಿಯ ಹೆಸರು ಏನು?">ಈ ಔಷಧಿಯ ಹೆಸರು ಏನು?</option>
+        <option value="ಈ ಔಷಧಿಯ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ನೀಡಿ.">ಈ ಔಷಧಿಯ ಸಂಪೂರ್ಣ ಮಾಹಿತಿ ನೀಡಿ.</option>
+        <option value="ಈ ಔಷಧಿಯನ್ನು ಯಾವುದಕ್ಕಾಗಿ ಬಳಸುತ್ತಾರೆ?">ಈ ಔಷಧಿಯನ್ನು ಯಾವುದಕ್ಕಾಗಿ ಬಳಸುತ್ತಾರೆ?</option>
+        <option value="ಇದರ ಮುಖ್ಯ ಉಪಯೋಗ ಏನು?">ಇದರ ಮುಖ್ಯ ಉಪಯೋಗ ಏನು?</option>
+        <option value="ಇದು ಯಾವ ಕಾಯಿಲೆಯ ಚಿಕಿತ್ಸೆಗೆ ಬಳಸಲಾಗುತ್ತದೆ?">ಇದು ಯಾವ ಕಾಯಿಲೆಯ ಚಿಕಿತ್ಸೆಗೆ ಬಳಸಲಾಗುತ್ತದೆ?</option>
+        <option value="ಈ ಔಷಧಿಯ ಸಂಯೋಜನೆ ಏನು?">ಈ ಔಷಧಿಯ ಸಂಯೋಜನೆ ಏನು?</option>
+        <option value="ಇದರಲ್ಲಿ ಯಾವ ಸಕ್ರಿಯ ಔಷಧೀಯ ಪದಾರ್ಥಗಳಿವೆ?">ಇದರಲ್ಲಿ ಯಾವ ಸಕ್ರಿಯ ಔಷಧೀಯ ಪದಾರ್ಥಗಳಿವೆ?</option>
+        <option value="ಈ ಔಷಧಿಯ ಶಕ್ತಿ ಎಷ್ಟು?">ಈ ಔಷಧಿಯ ಶಕ್ತಿ ಎಷ್ಟು?</option>
+        <option value="ಈ ಔಷಧಿಯನ್ನು ತಯಾರಿಸಿದ ಕಂಪನಿ ಯಾವುದು?">ಈ ಔಷಧಿಯನ್ನು ತಯಾರಿಸಿದ ಕಂಪನಿ ಯಾವುದು?</option>
+        <option value="ಇದರ ತಯಾರಕರು ಯಾರು?">ಇದರ ತಯಾರಕರು ಯಾರು?</option>
+        <option value="ಇದರ ಸಾಮಾನ್ಯ ಅಡ್ಡ ಪರಿಣಾಮಗಳು ಯಾವುವು?">ಇದರ ಸಾಮಾನ್ಯ ಅಡ್ಡ ಪರಿಣಾಮಗಳು ಯಾವುವು?</option>
+        <option value="ಈ ಔಷಧಿಯಿಂದ ಯಾವ ಅಡ್ಡ ಪರಿಣಾಮಗಳು ಉಂಟಾಗಬಹುದು?">ಈ ಔಷಧಿಯಿಂದ ಯಾವ ಅಡ್ಡ ಪರಿಣಾಮಗಳು ಉಂಟಾಗಬಹುದು?</option>
+        <option value="ಇದನ್ನು ತೆಗೆದುಕೊಂಡಾಗ ವಾಂತಿ ಅಥವಾ ತಲೆನೋವು ಉಂಟಾಗಬಹುದೇ?">ಇದನ್ನು ತೆಗೆದುಕೊಂಡಾಗ ವಾಂತಿ ಅಥವಾ ತಲೆನೋವು ಉಂಟಾಗಬಹುದೇ?</option>
+        <option value="ಈ ಔಷಧಿಯ ಉತ್ತಮ ವಿಮರ್ಶೆಗಳ ಶೇಕಡಾವಾರು ಎಷ್ಟು?">ಈ ಔಷಧಿಯ ಉತ್ತಮ ವಿಮರ್ಶೆಗಳ ಶೇಕಡಾವಾರು ಎಷ್ಟು?</option>
+        <option value="ಸರಾಸರಿ ವಿಮರ್ಶೆಗಳ ಶೇಕಡಾವಾರು ಎಷ್ಟು?">ಸರಾಸರಿ ವಿಮರ್ಶೆಗಳ ಶೇಕಡಾವಾರು ಎಷ್ಟು?</option>
+        <option value="ಕಳಪೆ ವಿಮರ್ಶೆಗಳ ಶೇಕಡಾವಾರು ಎಷ್ಟು?">ಕಳಪೆ ವಿಮರ್ಶೆಗಳ ಶೇಕಡಾವಾರು ಎಷ್ಟು?</option>
+        <option value="ಈ ಔಷಧಿಯ ಎಲ್ಲಾ ವಿಮರ್ಶಾ ಶೇಕಡಾವಾರುಗಳನ್ನು ತಿಳಿಸಿ.">ಈ ಔಷಧಿಯ ಎಲ್ಲಾ ವಿಮರ್ಶಾ ಶೇಕಡಾವಾರುಗಳನ್ನು ತಿಳಿಸಿ.</option>
+        <option value="ಈ ಔಷಧಿಯ ಡೋಸ್ ಎಷ್ಟು?">ಈ ಔಷಧಿಯ ಡೋಸ್ ಎಷ್ಟು?</option>
+        <option value="ಈ ಔಷಧಿಯ ಬಳಕೆ ಮತ್ತು ಅಡ್ಡ ಪರಿಣಾಮಗಳನ್ನು ತಿಳಿಸಿ.">ಈ ಔಷಧಿಯ ಬಳಕೆ ಮತ್ತು ಅಡ್ಡ ಪರಿಣಾಮಗಳನ್ನು ತಿಳಿಸಿ.</option>
+        <option value="ಸಂಯೋಜನೆ, ಉಪಯೋಗ ಮತ್ತು ತಯಾರಕರ ಮಾಹಿತಿ ನೀಡಿ.">ಸಂಯೋಜನೆ, ಉಪಯೋಗ ಮತ್ತು ತಯಾರಕರ ಮಾಹಿತಿ ನೀಡಿ.</option>
+        </select>
+        <label for="question">ನಿಮ್ಮ ಪ್ರಶ್ನೆ / Your question</label>
+        <textarea id="question" name="question" rows="3" placeholder="ಇದರ ಉಪಯೋಗ ಏನು?" required></textarea>
+        <button id="submit">Identify and answer</button>
+      </form>
+      <div id="result" role="status" aria-live="polite"></div>
+      <img id="annotated" alt="Text regions detected on the uploaded medicine cover" hidden>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

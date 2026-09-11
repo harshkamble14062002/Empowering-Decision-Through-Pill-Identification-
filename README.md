@@ -1,118 +1,91 @@
-# Empowering-Decision-Through-Pill-Identification-
-Empowering Decision Through Pill Identification 
-Here's the complete `README.md` file in a single text format for your GitHub repository:
+# Pill Detection
 
-```
-# Kannada QA: Pill Identification System
+A medicine-cover reader with questions and answers in English and Kannada. Upload a package photo, choose one of 20 Kannada questions or type your own, and view the matched medicine and its details.
 
-## Project Overview
-This system combines YOLOv5 (image recognition), EasyOCR (text extraction), and LLaMA-3 (chatbot) to:
-1. Identify medicines from uploaded images of pill packets
-2. Fetch details (uses, side effects, dosage) via the 1mg API
-3. Answer user queries in Kannada using a Retrieval-Augmented Generation (RAG) pipeline
+## How it works
 
-Goal: Bridge language barriers in healthcare for Kannada-speaking users
+EasyOCR reads the packaging text. The matcher groups nearby words, ignores packaging details such as batch numbers, and compares brand, composition and manufacturer text with the local medicine catalogue. Strength and formulation mismatches reduce the match score.
 
-## File Structure
-```
-├── Medicine_Details.csv          # Original dataset
-├── Medicine_Details_Updated.csv  # Processed dataset
-├── download_images_4.py          # Image download script
-├── failed_image_delete_3.py      # Clean corrupted images
-├── data_augmentation_5.py        # Augment dataset
-├── dataset_split_6.py            # Train/test/val split
-└── ... (see full list in repo)
-```
+When a match is accepted, the app retrieves the corresponding record and sends that row with the question to OpenRouter (`openrouter/free`). The answer follows the question's language. Uncertain matches stop before answer generation. If OpenRouter is unavailable, the app displays a local catalogue-based answer; descriptive fields in that fallback may remain in English.
 
-## Setup
-### Dependencies
-```bash
-pip install pandas numpy opencv-python requests Pillow transformers torch easyocr sentence-transformers
+This branch contains the full-image OCR application. Earlier YOLO experiments and training datasets are outside this branch.
+
+## Run locally
+
+Use Python 3.11. The default dependencies use CPU inference.
+
+```sh
+git clone --branch showcase --single-branch https://github.com/harshkamble14062002/Empowering-Decision-Through-Pill-Identification-.git pill-detection
+cd pill-detection
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
 ```
 
-Key Libraries:
-- YOLOv5: Pill detection
-- EasyOCR: Text extraction
-- Sentence-BERT: Semantic search
-- LLaMA-3-8B: Answer generation
-- Google Translate API: Kannada translations
+Set `OPENROUTER_API_KEY` in `.env`, then start the server:
 
-## How to Run
-### 1. Download & Preprocess Images
-```bash
-python download_images_4.py  # Fetch images from CSV URLs
-python failed_image_delete_3.py  # Remove corrupt images
+```sh
+uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-### 2. Train YOLOv5 Model
-```bash
-python train.py --img 640 --batch 16 --epochs 50 --data medicine.yaml --weights yolov5s.pt
-```
-(Customize medicine.yaml with your dataset paths.)
+Open [localhost:8000](http://localhost:8000). The `/ocr-csv` URL serves the same page. Without an API key, identification and local answers still work. The first OCR request downloads EasyOCR's pretrained weights; later requests reuse them.
 
-### 3. Run the Full Pipeline
-```bash
-python main.py --image_path "path/to/medicine_image.jpg" --query "ಈ ಗುಳಿಗೆಯ ಬಳಕೆ ಏನು?"
-```
+## Files
 
-Output:
-- Extracted medicine name (e.g., "Paracetamol")
-- Retrieved details from 1mg API
-- Kannada answer to the user's query
-
-## Key Components
-### 1. Medicine Identification
-- YOLOv5: Detects pill name region (mAP@0.5: 0.97)
-- EasyOCR: Extracts text with ~74% accuracy (improves with image quality)
-
-### 2. Chatbot Workflow
-1. Query Processing: Translates Kannada → English
-2. Semantic Search: Uses Sentence-BERT to find relevant info
-3. Answer Generation: LLaMA-3 generates responses → translated back to Kannada
-
-## Limitations & Future Work
-| Current | Future Improvements |
-|---------|----------------------|
-| Works best with clear images | Enhance OCR for blurry/low-light images |
-| Supports Kannada/English | Add more Indian languages (Hindi, Tamil) |
-| Latency ~2-5 sec/image | Optimize YOLOv5/LLaMA for real-time use |
-
-Planned Features:
-- Voice input/output support
-- Integration with local pharmacies for stock availability
-
-## Citations
-```bibtex
-@article{yolov5_2023,
-  title={YOLOv5: Real-Time Pill Detection},
-  author={Amir, Alay},
-  year={2023}
-}
-```
-(Full references in REFERENCES.md)
-
-## Contact
-Team: Parshuram G P, Parvati M B, Shreyas V M, Harsha Ravindra Kamble
-Guide: Dr. S. Saranya Rubini (PES University)
-Email: harshkamble14062002@gmail.com
-
-## Contribute
-PRs welcome! Open issues for bugs/feature requests.
+```text
+app/
+  __init__.py        Python package
+  main.py            FastAPI routes and request flow
+  ocr.py             Text extraction and medicine matching
+  rag.py             Record retrieval and bilingual answer handling
+  llm.py             OpenRouter client
+frontend/
+  index.html         Upload form and Kannada questions
+  app.js             Form submission and results
+  styles.css         Page styles
+data/
+  medicines.csv      Medicine catalogue
+  medicine_index.joblib  Indexed rows and saved embeddings
+tests/
+  test_api.py        Requests, upload limits and uncertain results
+  test_matching.py   OCR matching rules
+  test_answers.py    Retrieved evidence and language behavior
+  test_llm.py        OpenRouter requests and error handling
+.github/workflows/tests.yml  Automated tests
+.env.example         Configuration template
+.gitignore           Files excluded from Git
+.dockerignore        Files excluded from container builds
+Dockerfile           Container setup
+requirements.txt     Runtime dependencies
+requirements-dev.txt Test dependencies
+README.md            Setup and project notes
 ```
 
-This single text file contains all the essential information from your project in a clean, organized format ready for GitHub. It includes:
-1. Project overview and goals
-2. File structure
-3. Setup instructions
-4. Usage guide
-5. Technical components
-6. Limitations and future work
-7. Citations
-8. Contact information
+## Data and results
 
-The formatting uses GitHub-flavored Markdown for proper rendering on your repository page. Simply copy this entire text and save it as `README.md` in your project root directory.
-Want me to convert these scripts to use CLI arguments (`argparse`) so you don't need to edit them manually?
-Change `yourname@domain.com` or leave it blank.
+The catalogue contains 7,975 records with medicine name, composition, manufacturer, uses, side effects and review percentages. It is the existing project dataset; these fields have not been independently medically verified. Review percentages are values from that dataset, not measurements made by this application.
 
-Need help writing the `requirements.txt` or turning all these scripts into a clean CLI pipeline?
+The supplied index stores the same rows and 384-dimensional embeddings from `paraphrase-multilingual-MiniLM-L12-v2`. The current image workflow looks up the confirmed medicine by name in those indexed rows; it does not run a separate vector search for each question. No embedding model or LLM runs locally during that lookup. EasyOCR's pretrained detection and recognition models run locally.
+
+An earlier local evaluation on 50 internally reviewed images produced 36 correct, 0 wrong and 14 uncertain identifications. This is a small development sample, not an independent accuracy benchmark. Identification can fail on blurry images, missing strengths, unfamiliar brands or incomplete catalogue entries. The app is an educational prototype and does not provide treatment or dosing advice.
+
+## Tests
+
+```sh
+pip install -r requirements-dev.txt
+python -m pytest -q
 ```
+
+The automated tests mock OCR or OpenRouter where needed and do not make external LLM calls. They check matching, retrieval, language selection, uncertain results and the web API.
+
+## Docker
+
+```sh
+docker build -t pill-detection .
+docker run --rm -p 8000:8000 --env-file .env pill-detection
+```
+
+The image downloads OCR weights during the build. Use one server worker and allow about 2 GiB of memory. The API accepts JPG, PNG, WEBP and BMP uploads up to 10 MB. Requests are processed one at a time within the worker.
+
+`GET /healthz` reports whether an OpenRouter key is configured; it does not test the provider connection. `POST /api/analyze` accepts multipart fields named `image` and `question`. Uploaded images and generated previews are removed after each request. Only the question and matched catalogue row are sent to OpenRouter.
