@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: kannada-medicine-assistant
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    autoDeployTrigger: commit
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: openrouter/free
+      - key: ENABLE_MULTICLASS
+        value: "false"

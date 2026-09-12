@@ -1,0 +1,15 @@
+const form=document.querySelector('#form'),out=document.querySelector('#result'),img=document.querySelector('#annotated'),btn=document.querySelector('#submit'),preset=document.querySelector('#preset'),question=document.querySelector('#question');
+preset.onchange=()=>{if(preset.value){question.value=preset.value;question.focus()}};
+form.onsubmit=async(e)=>{e.preventDefault();btn.disabled=true;out.textContent='Processing…';img.hidden=true;
+try{const r=await fetch(form.dataset.apiEndpoint,{method:'POST',body:new FormData(form)}),d=await r.json();if(!r.ok)throw Error(d.detail||'Request failed');
+const kn=/[\u0c80-\u0cff]/.test(question.value);
+const classKn={brand_name:'ಬ್ರ್ಯಾಂಡ್ ಹೆಸರು',composition:'ಸಂಯೋಜನೆ',manufacturer:'ತಯಾರಕರು',ignore:'ನಿರ್ಲಕ್ಷಿಸಲಾಗಿದೆ'};
+const reasonKn={weak_brand_identity:'ಬ್ರ್ಯಾಂಡ್ ಗುರುತು ದುರ್ಬಲವಾಗಿದೆ',weak_combined_match:'ಒಟ್ಟಾರೆ ಹೊಂದಾಣಿಕೆ ದುರ್ಬಲವಾಗಿದೆ',ambiguous_candidates:'ಹಲವು ಸಮಾನ ಅಭ್ಯರ್ಥಿಗಳಿವೆ',strength_not_read:'ಔಷಧಿಯ ಶಕ್ತಿಯನ್ನು ಓದಲಾಗಲಿಲ್ಲ',manufacturer_conflict:'ತಯಾರಕರ ಮಾಹಿತಿ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ'};
+const regions=(d.ocr_regions||[]).map(x=>`${kn?(classKn[x.class_name]||x.class_name):x.class_name}: ${x.text}`).join('\n');
+const generated=d.generation&&d.generation.generated;
+const answerLabel=kn?(generated?'LLM ಉತ್ತರ':'ಸ್ಥಳೀಯ ಪರ್ಯಾಯ ಉತ್ತರ'):(generated?'LLM output':'Local fallback');
+const method=kn?(d.requested_backend==='multiclass'?'ಬಹುವರ್ಗ YOLO + OCR':'ಪೂರ್ಣ-ಚಿತ್ರ OCR + CSV'):d.identification_method;
+const reasons=(d.uncertainty_reasons||[]).map(x=>kn?(reasonKn[x]||x):x).join(', ');
+const details=d.medicine?(kn?`ಔಷಧಿ: ${d.medicine.medicine_name}\nಸಂಯೋಜನೆ: ${d.medicine.composition}\nತಯಾರಕರು: ${d.medicine.manufacturer}\nಹೊಂದಾಣಿಕೆ ಅಂಕ: ${d.medicine.match_score}\nವಿಧಾನ: ${method}\n\nಚಿತ್ರದಿಂದ ಓದಿದ ಪಠ್ಯ ಪ್ರದೇಶಗಳು:\n${regions}`:`Medicine: ${d.medicine.medicine_name}\nComposition: ${d.medicine.composition}\nManufacturer: ${d.medicine.manufacturer}\nMatch score: ${d.medicine.match_score}\nMethod: ${method}\n\nOCR regions:\n${regions}`):(kn?`ಸ್ಥಿತಿ: ${d.status}\n${reasons}\n\nಚಿತ್ರದಿಂದ ಓದಿದ ಪಠ್ಯ ಪ್ರದೇಶಗಳು:\n${regions}`:`Status: ${d.status}\n${reasons}\n\nOCR regions:\n${regions}`);
+out.textContent=answerLabel+':\n'+d.answer+'\n\n'+details;
+if(d.annotated_image){img.src=d.annotated_image;img.hidden=false}}catch(x){out.textContent=x.message}finally{btn.disabled=false}};

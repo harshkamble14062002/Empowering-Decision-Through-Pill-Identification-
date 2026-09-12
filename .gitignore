@@ -1,0 +1,15 @@
+.env
+__pycache__/
+.pytest_cache/
+output/
+llama.cpp/
+models/*.gguf
+unwanted/
+releases/
+pytorch-env/
+*.joblib
+medicine_rag_index.joblib
+medicine_rag_sbert_index.joblib
+.kilo/
+hf_space_gitignore.txt
+api_cache/
