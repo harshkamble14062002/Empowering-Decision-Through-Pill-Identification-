@@ -1,7 +1,7 @@
 const form=document.querySelector('#form'),out=document.querySelector('#result'),img=document.querySelector('#annotated'),btn=document.querySelector('#submit'),preset=document.querySelector('#preset'),question=document.querySelector('#question');
 preset.onchange=()=>{if(preset.value){question.value=preset.value;question.focus()}};
 form.onsubmit=async(e)=>{e.preventDefault();btn.disabled=true;out.textContent='Processing…';img.hidden=true;
-try{const r=await fetch(form.dataset.apiEndpoint,{method:'POST',body:new FormData(form)}),d=await r.json();if(!r.ok)throw Error(d.detail||'Request failed');
+try{const r=await fetch(form.dataset.apiEndpoint,{method:'POST',body:new FormData(form)});const text=await r.text();let d;try{d=JSON.parse(text)}catch(_){throw Error('Server error: '+(text.slice(0,120)||r.status))}if(!r.ok)throw Error(d.detail||'Request failed');
 const kn=/[\u0c80-\u0cff]/.test(question.value);
 const classKn={brand_name:'ಬ್ರ್ಯಾಂಡ್ ಹೆಸರು',composition:'ಸಂಯೋಜನೆ',manufacturer:'ತಯಾರಕರು',ignore:'ನಿರ್ಲಕ್ಷಿಸಲಾಗಿದೆ'};
 const reasonKn={weak_brand_identity:'ಬ್ರ್ಯಾಂಡ್ ಗುರುತು ದುರ್ಬಲವಾಗಿದೆ',weak_combined_match:'ಒಟ್ಟಾರೆ ಹೊಂದಾಣಿಕೆ ದುರ್ಬಲವಾಗಿದೆ',ambiguous_candidates:'ಹಲವು ಸಮಾನ ಅಭ್ಯರ್ಥಿಗಳಿವೆ',strength_not_read:'ಔಷಧಿಯ ಶಕ್ತಿಯನ್ನು ಓದಲಾಗಲಿಲ್ಲ',manufacturer_conflict:'ತಯಾರಕರ ಮಾಹಿತಿ ಹೊಂದಿಕೆಯಾಗಲಿಲ್ಲ'};
