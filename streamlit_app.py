@@ -37,7 +37,7 @@ def get_generator(ui_api_key=""):
     os.environ["OPENROUTER_API_KEY"] = api_key
     return OpenRouterGenerator(api_key=api_key)
 
-st.set_page_config(page_title="Kannada Medicine Assistant", page_icon="💊")
+st.set_page_config(page_title="Empowering-Decision-Through-Pill-Identification", page_icon="💊")
 
 # Sidebar for API key input
 with st.sidebar:
@@ -45,7 +45,7 @@ with st.sidebar:
     user_api_key = st.text_input("OpenRouter API Key", type="password", help="Paste your sk-or-... key here")
     st.markdown("[Get an API key here](https://openrouter.ai/settings/keys)")
 
-st.title("💊 Kannada Medicine Assistant")
+st.title("💊 Empowering-Decision-Through-Pill-Identification")
 st.markdown("**ಬೆಂಬಲಿತ ಭಾಷೆ (Supported):** ಕನ್ನಡ & English. Upload a medicine cover image and ask a question about it.")
 
 # Predefined Questions

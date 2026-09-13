@@ -20,7 +20,7 @@ from backend.services.llm import OpenRouterGenerator
 
 
 PIPELINE_LOCK = threading.Lock()
-app = FastAPI(title="Kannada Medicine Assistant", version="1.0")
+app = FastAPI(title="Empowering-Decision-Through-Pill-Identification", version="1.0")
 app.mount("/static", StaticFiles(directory=FRONTEND_TEMPLATE.parent / "static"), name="static")
 
 
@@ -124,7 +124,7 @@ def render_page(title, method, api_endpoint, alternate_href=None, alternate_labe
 @app.get("/ocr-csv", response_class=HTMLResponse)
 def ocr_csv_page():
     return render_page(
-        "Medicine Assistant",
+        "Empowering-Decision-Through-Pill-Identification",
         "Full-image EasyOCR + CSV/RapidFuzz",
         "/api/analyze", "/multiclass", "Open multiclass YOLO UI",
     )
@@ -135,8 +135,7 @@ def multiclass_page():
     if not ENABLE_MULTICLASS:
         raise HTTPException(404, "Multiclass comparison is disabled on this deployment.")
     return render_page(
-        "Medicine Assistant — Multiclass YOLO",
+        "Empowering-Decision-Through-Pill-Identification — Multiclass YOLO",
         "YOLO brand/composition/manufacturer crops + EasyOCR",
         "/api/analyze/multiclass", "/ocr-csv", "Open full-image OCR UI",
     )
-

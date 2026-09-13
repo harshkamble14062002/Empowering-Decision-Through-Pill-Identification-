@@ -1,6 +1,6 @@
-# Kannada Medicine Assistant
+# Empowering-Decision-Through-Pill-Identification
 
-Kannada Medicine Assistant is a medicine-cover identification prototype for Kannada and English users. A user uploads a photograph of a medicine strip, box, or bottle and asks a question. The application reads the packaging, searches a local medicine catalogue, and answers from the matched catalogue record.
+Empowering-Decision-Through-Pill-Identification is a medicine-cover identification prototype for Kannada and English users. A user uploads a photograph of a medicine strip, box, or bottle and asks a question. The application reads the packaging, searches a local medicine catalogue, and answers from the matched catalogue record.
 
 The project is intended for demonstrations, education, and evaluation. It does not replace a doctor or pharmacist and must not be used to choose a medicine, change treatment, or decide a dose.
 
@@ -8,13 +8,13 @@ The project is intended for demonstrations, education, and evaluation. It does n
 
 Open the deployed Streamlit application:
 
-**[Kannada Medicine Assistant](https://kannada-medicine-assistant-live-fm3j9tvsrcjczr5deqqr6n.streamlit.app/)**
+**[Empowering-Decision-Through-Pill-Identification](https://kannada-medicine-assistant-live-fm3j9tvsrcjczr5deqqr6n.streamlit.app/)**
 
 The application may ask you to sign in with Streamlit before opening the interface.
 
-When a screenshot is available at `assets/image.png`, it will appear below and open the live application when clicked:
+Click the screenshot to open the live application:
 
-[![Kannada Medicine Assistant live application](assets/Screenshot_20260913_130054.png)])
+[![Empowering-Decision-Through-Pill-Identification live application](assets/Screenshot_20260913_130054.png)](https://kannada-medicine-assistant-live-fm3j9tvsrcjczr5deqqr6n.streamlit.app/)
 
 ## What the application accepts
 

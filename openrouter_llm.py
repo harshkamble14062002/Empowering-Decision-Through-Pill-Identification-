@@ -85,7 +85,7 @@ class OpenRouterGenerator:
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
             "HTTP-Referer": "http://localhost:8000",
-            "X-Title": "Kannada Medicine Assistant",
+            "X-Title": "Empowering-Decision-Through-Pill-Identification",
         }
         response = requests.post(self.endpoint, headers=headers, json=payload, timeout=self.timeout)
         # Some free routed models reject JSON Schema or reasoning controls. Retry once
@@ -116,4 +116,3 @@ class OpenRouterGenerator:
         if not answer or not valid_script:
             raise RuntimeError(f"OpenRouter did not return a valid {language} answer")
         return answer
-
