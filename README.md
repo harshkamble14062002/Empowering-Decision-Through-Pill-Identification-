@@ -14,7 +14,7 @@ The application may ask you to sign in with Streamlit before opening the interfa
 
 When a screenshot is available at `assets/image.png`, it will appear below and open the live application when clicked:
 
-[![Kannada Medicine Assistant live application](assets/image.png)](https://kannada-medicine-assistant-live-fm3j9tvsrcjczr5deqqr6n.streamlit.app/)
+[![Kannada Medicine Assistant live application](assets/Screenshot_20260913_130054.png)])
 
 ## What the application accepts
 
