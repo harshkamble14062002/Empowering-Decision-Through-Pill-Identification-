@@ -1,4 +1,4 @@
-# Pill Detection
+# Empowering-Decision-Through-Pill-Identification
 
 A medicine-cover reader with questions and answers in English and Kannada. Upload a package photo, choose one of 20 Kannada questions or type your own, and view the matched medicine and its details.
 

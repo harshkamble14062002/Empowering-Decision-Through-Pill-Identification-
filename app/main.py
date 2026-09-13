@@ -22,7 +22,7 @@ MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
 PIPELINE_LOCK = threading.Lock()
 
-app = FastAPI(title="Pill Detection", version="1.0")
+app = FastAPI(title="Empowering-Decision-Through-Pill-Identification", version="1.0")
 app.mount("/static", StaticFiles(directory=FRONTEND), name="static")
 
 
