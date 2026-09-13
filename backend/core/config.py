@@ -5,7 +5,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 FRONTEND_TEMPLATE = PROJECT_ROOT / "frontend" / "index.html"
 DATABASE_FILE = PROJECT_ROOT / "database" / "runtime" / "medicine_details_verified.csv"
-RAG_INDEX_FILE = PROJECT_ROOT / "database" / "runtime" / "medicine_rag_sbert_index.joblib"
+RAG_INDEX_FILE = PROJECT_ROOT / "database" / "runtime" / "medicine_rag_tfidf_index.joblib"
 MULTICLASS_MODEL_FILE = PROJECT_ROOT / "multiclass_models" / "best_multiclass.pt"
 OUTPUT_DIRECTORY = PROJECT_ROOT / "output" / "live"
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
