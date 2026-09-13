@@ -18,9 +18,20 @@ from backend.services.chatbot import run as run_chatbot
 from backend.services.llm import OpenRouterGenerator
 from backend.core.config import DATABASE_FILE, RAG_INDEX_FILE
 
-@st.cache_resource
 def get_generator():
-    return OpenRouterGenerator()
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
+    try:
+        if "OPENROUTER_API_KEY" in st.secrets:
+            api_key = st.secrets["OPENROUTER_API_KEY"]
+            os.environ["OPENROUTER_API_KEY"] = api_key
+    except Exception:
+        pass
+        
+    if not api_key:
+        st.error("API Key missing! Please add OPENROUTER_API_KEY in Streamlit Secrets (Settings > Secrets).")
+        st.stop()
+        
+    return OpenRouterGenerator(api_key=api_key)
 
 st.set_page_config(page_title="Kannada Medicine Assistant", page_icon="💊")
 
