@@ -4,6 +4,13 @@ from pathlib import Path
 import os
 import re
 
+# Pass secrets to environment variables so the backend can read them
+try:
+    if "OPENROUTER_API_KEY" in st.secrets:
+        os.environ["OPENROUTER_API_KEY"] = st.secrets["OPENROUTER_API_KEY"]
+except Exception:
+    pass
+
 # Set environment before any internal imports happen
 os.environ["ENABLE_MULTICLASS"] = "false"
 
