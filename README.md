@@ -4,6 +4,14 @@ Kannada Medicine Assistant is a medicine-cover identification prototype for Kann
 
 The project is intended for demonstrations, education, and evaluation. It does not replace a doctor or pharmacist and must not be used to choose a medicine, change treatment, or decide a dose.
 
+## Live application
+
+Open the deployed Streamlit application:
+
+**[Kannada Medicine Assistant](https://kannada-medicine-assistant-live-fm3j9tvsrcjczr5deqqr6n.streamlit.app/)**
+
+The application may ask you to sign in with Streamlit before opening the interface.
+
 ## What the application accepts
 
 The Streamlit page accepts two inputs.
