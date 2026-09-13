@@ -26,6 +26,7 @@ pill_detection_dataset*/
 medicine_images.zip
 Medicine_Details*.csv
 medicine_rag*.joblib
+!database/runtime/*.joblib
 archive/
 docs/
 scripts/
@@ -34,3 +35,6 @@ uncertain_review_14/
 *.md
 !README.md
 unwanted/
+.devcontainer/
+assets/
+.kilo/

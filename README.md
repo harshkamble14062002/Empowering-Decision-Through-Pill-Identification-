@@ -171,6 +171,7 @@ openrouter_llm.py          OpenRouter request and grounded-answer validation
 main_chatbot.py            End-to-end pipeline orchestration
 streamlit_app.py           Streamlit Community Cloud entry point
 requirements.txt           Streamlit runtime dependencies
+Dockerfile                 Container build for the Streamlit application
 ```
 
 The active configuration requests `medicine_rag_tfidf_index.joblib`. If that file is not present when a request starts, `main_chatbot.py` builds it from the runtime CSV before continuing. The bundled SBERT index is retained as a project artifact but is not selected by the current Streamlit configuration.
@@ -207,6 +208,36 @@ streamlit run streamlit_app.py
 Open the URL printed by Streamlit, normally `http://localhost:8501`.
 
 The first OCR run may be slower because EasyOCR downloads and initializes its recognition models.
+
+## Run with Docker
+
+The Docker image uses Python 3.11, CPU-only OCR, a non-root user, and Streamlit's default port `8501`. EasyOCR's English recognition files are downloaded during the image build, so the running container does not need to download them on its first request.
+
+Build the image from the repository root:
+
+```bash
+docker build -t empowering-pill-identification:latest .
+```
+
+Run it with an OpenRouter key from the shell environment:
+
+```bash
+docker run --rm \
+  -p 8501:8501 \
+  -e OPENROUTER_API_KEY="$OPENROUTER_API_KEY" \
+  -e OPENROUTER_MODEL="openrouter/free" \
+  empowering-pill-identification:latest
+```
+
+Open `http://localhost:8501`.
+
+To load values from a local `.env` file instead:
+
+```bash
+docker run --rm --env-file .env -p 8501:8501 empowering-pill-identification:latest
+```
+
+The image includes the catalogue and bundled runtime index. The active TF-IDF index is generated from the catalogue when it is absent. Do not copy `.env` into the image; `.dockerignore` excludes it.
 
 ## Deploy on Streamlit Community Cloud
 
