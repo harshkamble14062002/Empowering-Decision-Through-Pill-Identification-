@@ -4,6 +4,7 @@ torchvision
 easyocr>=1.7,<2
 opencv-python-headless>=4.10,<5
 numpy>=2,<3
+scikit-learn>=1.2,<2
 rapidfuzz>=3,<4
 joblib>=1.4,<2
 requests>=2,<3
