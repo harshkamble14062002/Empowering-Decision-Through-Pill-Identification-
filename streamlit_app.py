@@ -18,22 +18,32 @@ from backend.services.chatbot import run as run_chatbot
 from backend.services.llm import OpenRouterGenerator
 from backend.core.config import DATABASE_FILE, RAG_INDEX_FILE
 
-def get_generator():
+def get_generator(ui_api_key=""):
     api_key = os.environ.get("OPENROUTER_API_KEY", "")
     try:
         if "OPENROUTER_API_KEY" in st.secrets:
             api_key = st.secrets["OPENROUTER_API_KEY"]
-            os.environ["OPENROUTER_API_KEY"] = api_key
     except Exception:
         pass
         
+    # Use the key from the sidebar if the user pasted one
+    if ui_api_key:
+        api_key = ui_api_key
+        
     if not api_key:
-        st.error("API Key missing! Please add OPENROUTER_API_KEY in Streamlit Secrets (Settings > Secrets).")
+        st.error("⚠️ API Key missing! Please enter it in the sidebar on the left.")
         st.stop()
         
+    os.environ["OPENROUTER_API_KEY"] = api_key
     return OpenRouterGenerator(api_key=api_key)
 
 st.set_page_config(page_title="Kannada Medicine Assistant", page_icon="💊")
+
+# Sidebar for API key input
+with st.sidebar:
+    st.header("Settings")
+    user_api_key = st.text_input("OpenRouter API Key", type="password", help="Paste your sk-or-... key here")
+    st.markdown("[Get an API key here](https://openrouter.ai/settings/keys)")
 
 st.title("💊 Kannada Medicine Assistant")
 st.markdown("**ಬೆಂಬಲಿತ ಭಾಷೆ (Supported):** ಕನ್ನಡ & English. Upload a medicine cover image and ask a question about it.")
@@ -80,7 +90,7 @@ if st.button("Identify and answer", type="primary"):
                         index=RAG_INDEX_FILE,
                         output=temp_dir / "output",
                         quiet=True,
-                        generator=get_generator(),
+                        generator=get_generator(user_api_key),
                         identification_backend="ocr_csv",
                         model=None
                     )
