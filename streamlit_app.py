@@ -15,9 +15,9 @@ from backend.core.config import DATABASE_FILE, RAG_INDEX_FILE
 def get_generator():
     return OpenRouterGenerator()
 
-st.set_page_config(page_title="Kannada Medicine Assistant", page_icon="💊")
+st.set_page_config(page_title="Empowering-Decision-Through-Pill-Identification", page_icon="💊")
 
-st.title("💊 Kannada Medicine Assistant")
+st.title("💊 Empowering-Decision-Through-Pill-Identification")
 st.markdown("**ಬೆಂಬಲಿತ ಭಾಷೆ (Supported):** ಕನ್ನಡ & English. Upload a medicine cover image and ask a question about it.")
 
 # Predefined Questions

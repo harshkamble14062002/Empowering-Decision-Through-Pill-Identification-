@@ -1,4 +1,4 @@
-# Kannada Medicine Assistant
+# Empowering-Decision-Through-Pill-Identification
 
 A bilingual (Kannada/English) tool that identifies medicines from photos and answers questions about them. 
 
